@@ -9,6 +9,8 @@
   "dependencies": {
     "react": "16.2.0",
     "react-native": "0.53.3",
+    "react-native-baidu-map": "^0.6.0",
+    "react-native-cli": "^2.0.1",
     "react-navigation": "^1.1.2"
   },
   "devDependencies": {

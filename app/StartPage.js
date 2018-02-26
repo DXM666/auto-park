@@ -11,7 +11,7 @@ import { StackNavigator } from "react-navigation";
 export class StartPage extends Component {
     static navigationOptions = {
         header: false
-    }
+    };
     componentDidMount() {
         const { replace } = this.props.navigation;
         setTimeout(
