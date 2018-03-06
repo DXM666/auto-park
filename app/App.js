@@ -23,10 +23,23 @@ import {
   AppRegistry,
   TouchableHighlight
 } from 'react-native';
+import { DrawerNavigator , DrawerItems  } from "react-navigation";
 
 import Dimensions from 'Dimensions';
 
 export default class App extends Component {
+    static navigationOptions = {
+    drawer: () => ({
+      label: 'Home',
+      icon: ({ tintColor }) => (
+        <Image
+          source={require('./img/dota2.jpg')}
+          style={[styles.icon, {tintColor: tintColor}]}
+        />
+      ),
+    }),
+    }
+
   constructor() {
         super();
         this.state = {
@@ -75,22 +88,26 @@ export default class App extends Component {
   render() {
     return (
        <View style={styles.container}>
-        <MapView
-          trafficEnabled={this.state.trafficEnabled}
-          baiduHeatMapEnabled={this.state.baiduHeatMapEnabled}
-          zoom={this.state.zoom}
-          mapType={this.state.mapType}
-          center={this.state.center}
-          marker={this.state.marker}
-          markers={this.state.markers}
-          style={styles.map}
-          onMarkerClick={(e) => {
-            console.warn(JSON.stringify(e));
-          }}
-          onMapClick={(e) => {
-          }}
-        >
-        </MapView>
+           <Button
+               onPress={() => this.props.navigation.navigate('Notifications')}
+               title=" MyHomeScreen ----> open drawer"
+           />
+            <MapView
+              trafficEnabled={this.state.trafficEnabled}
+              baiduHeatMapEnabled={this.state.baiduHeatMapEnabled}
+              zoom={this.state.zoom}
+              mapType={this.state.mapType}
+              center={this.state.center}
+              marker={this.state.marker}
+              markers={this.state.markers}
+              style={styles.map}
+              onMarkerClick={(e) => {
+                console.warn(JSON.stringify(e));
+              }}
+              onMapClick={(e) => {
+              }}
+            >
+            </MapView>
 
         <View style={styles.row}>
           <Button title="Normal" onPress={() => {
@@ -178,5 +195,9 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height - 200,
     marginBottom: 16
+  },
+  icon: {
+    width: 24,
+    height: 24,
   }
 });
