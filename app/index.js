@@ -1,16 +1,19 @@
-import { AppRegistry } from 'react-native';
-import App from './App';
-import { StackNavigator } from "react-navigation";
-import { StartPage } from "./StartPage";
-import { MyNotificationsScreen } from "./MyNotificationsScreen";
+import React, { Component } from 'react';
+import {
+  AppRegistry,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
+import Root from './root';
+export default class CountersDemo extends Component {
+  render() {
+    return (
+      <Root />
+    );
+  }
+}
 
-const SimpleApp = StackNavigator({
-    Home: {
-        screen: StartPage
-    },
-    HomePage: {
-        screen: App
-    },
-})
 
-AppRegistry.registerComponent('app', () => SimpleApp);
+AppRegistry.registerComponent('app', () => CountersDemo);
+

@@ -13,6 +13,7 @@ export class StartPage extends Component {
         header: false
     };
     componentDidMount() {
+        console.log(this.props.navigation)
         const { replace } = this.props.navigation;
         setTimeout(
             () => {
@@ -23,7 +24,7 @@ export class StartPage extends Component {
     render() {
         return (
             <View>
-                <Image source={require('./img/timg.jpg')} />
+                <Image source={require('../img/timg.jpg')} />
             </View>
         )
     }
