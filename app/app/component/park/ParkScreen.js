@@ -26,7 +26,7 @@ import {
 import Dimensions from 'Dimensions';
 import { connect } from 'react-redux';
 
-import { getCurrentPosition_Send } from '../../action/weatheractions';
+import { getCurrentPosition_Send } from '../../action/parkactions';
 
 
 class Park extends Component {

@@ -18,6 +18,7 @@ import { connect } from 'react-redux';
 
 
 import { Forecast } from './Forecast'
+import { requestWeatherByName_Send } from '../../action/weatheractions'
 
 
 //天气模块
@@ -26,38 +27,37 @@ export class Weather extends Component {
         super(props);
         this.state = {
             weather: {},
-            address:''
+            address: ''
         }
     }
 
     componentDidMount() {
-        console.log(this.props.city)
-        this.fetchWeatherData(this.props.city);
+        this.props.requestWeatherByName(this.props.city)
     }
 
-    fetchWeatherData(address) {
-        var url = "https://www.sojson.com/open/api/weather/json.shtml?city=" + address;
-        fetch(url)
-            .then(
-            (response) =>
-                response.json()
-            )
-            .then((response) => {
-                console.log(response)
-                this.setState({
-                    weather: {
-                        main: response.data.forecast[0].type,
-                        description_low: response.data.forecast[0].low,
-                        description_high: response.data.forecast[0].high,
-                        temp: response.data.ganmao
-                    }
-                });
-            })
-            .catch((error) => {
-                console.warn(error);
-                alert('服务异常,正在紧急修复,请耐心等待')
-            });
-    }
+    // fetchWeatherData(address) {
+    //     var url = "https://www.sojson.com/open/api/weather/json.shtml?city=" + address;
+    //     fetch(url)
+    //         .then(
+    //         (response) =>
+    //             response.json()
+    //         )
+    //         .then((response) => {
+    //             console.log(response)
+    //             this.setState({
+    //                 weather: {
+    //                     main: response.data.forecast[0].type,
+    //                     description_low: response.data.forecast[0].low,
+    //                     description_high: response.data.forecast[0].high,
+    //                     temp: response.data.ganmao
+    //                 }
+    //             });
+    //         })
+    //         .catch((error) => {
+    //             console.warn(error);
+    //             alert('服务异常,正在紧急修复,请耐心等待')
+    //         });
+    // }
 
     handleTextChange(addressText) {
         this.setState({
@@ -97,10 +97,19 @@ const styles = StyleSheet.create({
         height: 44,
     }
 });
+
 function importStateToProps(storeState) {
     return {
-        city: storeState.city
+        city: storeState.weatherReducer.city
     }
 }
 
-export const WeatherScreen = connect(importStateToProps)(Weather)
+function importActionToProps(dispatch) {
+    return {
+        requestWeatherByName: (name) => {
+            dispatch(requestWeatherByName_Send(dispatch, name))
+        }
+    }
+}
+
+export const WeatherScreen = connect(importStateToProps, importActionToProps)(Weather)

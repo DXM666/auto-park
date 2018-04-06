@@ -1,6 +1,6 @@
 let initState = {
-    isLoading: false,
-    isError: false,
+    isParkLoading: false,
+    isParkError: false,
     city: '北京',
     // mayType: MapTypes.NORMAL,
     zoom: 15,
@@ -25,13 +25,13 @@ export function parkReducer(oldState = initState, action) {
     switch (action.type) {
         case 'getCurrentPosition_Send':
             var obj = Object.assign({}, oldState, {
-                isLoading: true,
-                isError: false
+                isParkLoading: true,
+                isParkError: false
             })
             return obj
         case 'getCurrentPosition_Success':
             var obj = Object.assign({}, oldState, {
-                city:action.position.data.city,
+                city: action.position.data.city,
                 zoom: 18,
                 markers: [{
                     latitude: action.position.data.latitude,
@@ -42,14 +42,14 @@ export function parkReducer(oldState = initState, action) {
                     latitude: action.position.data.latitude,
                     longitude: action.position.data.longitude,
                 },
-                isLoading: true,
-                isError: false
+                isParkLoading: true,
+                isParkError: false
             })
             return obj
         case 'getCurrentPosition_Error':
             var obj = Object.assign({}, oldState, {
-                isLoading: false,
-                isError: true
+                isParkLoading: false,
+                isParkError: true
             })
             return obj
     }
