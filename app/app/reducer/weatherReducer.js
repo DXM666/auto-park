@@ -1,7 +1,8 @@
 let initState = {
     isWeatherLoading: false,
     isWeatherError: false,
-    city: '北京'
+    city: '北京',
+    weatherData:''
 }
 
 export function weatherReducer(oldState = initState, action) {

@@ -13,7 +13,6 @@ export class StartPage extends Component {
         header: false
     };
     componentDidMount() {
-        console.log(this.props.navigation)
         const { replace } = this.props.navigation;
         setTimeout(
             () => {

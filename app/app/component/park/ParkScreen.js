@@ -37,7 +37,6 @@ class Park extends Component {
     this.mayType = MapTypes.NORMAL
   }
   componentDidMount() { // 获取位置
-    console.log(this.props)
     this.props.getCurrentPosition()
   }
   render() {
@@ -130,6 +129,7 @@ const styles = StyleSheet.create({
 });
 
 function importStateToProps(storeState) {
+  console.log(storeState)
   return {
     city: storeState.city,
     zoom: storeState.zoom,

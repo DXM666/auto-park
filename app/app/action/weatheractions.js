@@ -20,7 +20,6 @@ export function requestWeatherByName_Send(dispatch, name) {
 }
 
 export function requestWeatherByName_Success(data){
-    console.log('data',data)
     return {
         type: 'requestWeatherByName_Success',
         weatherdata:{

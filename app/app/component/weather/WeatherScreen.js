@@ -17,8 +17,9 @@ import {
 import { connect } from 'react-redux';
 
 
-import { Forecast } from './Forecast'
-import { requestWeatherByName_Send } from '../../action/weatheractions'
+import { Forecast } from './Forecast';
+import { requestWeatherByName_Send } from '../../action/weatheractions';
+import { AirCondition } from './air_condition';
 
 
 //天气模块
@@ -32,6 +33,7 @@ export class Weather extends Component {
     }
 
     componentDidMount() {
+        console.log(this.props)
         this.props.requestWeatherByName(this.props.city)
     }
 
@@ -68,6 +70,7 @@ export class Weather extends Component {
     render() {
         return (
             <View style={styles.container}>
+                    <AirCondition weather={this.props.weatherData}/>
                 <TextInput style={styles.input} onChangeText={(text) => this.handleTextChange(text)} />
                 <TouchableHighlight
                     onPress={() => this.fetchWeatherData(this.state.address)} >
@@ -99,8 +102,10 @@ const styles = StyleSheet.create({
 });
 
 function importStateToProps(storeState) {
+    console.log(storeState)
     return {
-        city: storeState.weatherReducer.city
+        city: storeState.parkReducer.city,
+        weatherData: storeState.weatherReducer.weatherData
     }
 }
 
