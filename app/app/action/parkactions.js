@@ -4,7 +4,6 @@ import { Geolocation } from 'react-native-baidu-map';
 export function getCurrentPosition_Send(dispatch) {
     Geolocation.getCurrentPosition().then(
         (data) => {
-            console.log(data)
             dispatch(getCurrentPosition_Success(data))
         }
     ).catch(error => {

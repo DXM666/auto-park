@@ -17,7 +17,7 @@ import { connect } from 'react-redux';
 
 import { Divider } from "../../common/divider";
 import { WeatherStyles } from '../../styles/index';
-// import { AirQualityItem } from './air_quality_item';
+import { AirQualityItem } from './air_quality_item';
 
 
 
@@ -50,12 +50,11 @@ export class AirCondition extends Component {
     };
 
     render() {
-
+        console.log(this.props)
         let marginLeftValue = 50;
         // if (!this.props.weather.loading) {
         if (this.props.weather) {
             let weatherData = this.props.weather;
-            console.log(this.props)
             marginLeftValue = weatherData.aqi.city.aqi;
         }
         let offset = marginLeftValue;
@@ -90,16 +89,16 @@ export class AirCondition extends Component {
                 </View>
                 <View style={styles.detailColumnContainer}>
                     <View style={styles.detailRowContainer}>
-                        <AirQualityItem index={0} aqiList={this.props.weather} />
-                        <AirQualityItem index={1} />
+                        <AirQualityItem index={0} aqi={this.props.weather} />
+                        {/* <AirQualityItem index={1} aqiList={this.props.weather} />
                     </View>
                     <View style={styles.detailRowContainer}>
-                        <AirQualityItem index={2} />
-                        <AirQualityItem index={3} />
+                        <AirQualityItem index={2} aqiList={this.props.weather} />
+                        <AirQualityItem index={3} aqiList={this.props.weather} />
                     </View>
                     <View style={styles.detailRowContainer}>
-                        <AirQualityItem index={4} />
-                        <AirQualityItem index={5} />
+                        <AirQualityItem index={4} aqiList={this.props.weather} />
+                        <AirQualityItem index={5} aqiList={this.props.weather} /> */}
                     </View>
                 </View>
             </View>

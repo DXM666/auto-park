@@ -129,7 +129,6 @@ const styles = StyleSheet.create({
 });
 
 function importStateToProps(storeState) {
-  console.log(storeState)
   return {
     city: storeState.city,
     zoom: storeState.zoom,

@@ -33,7 +33,6 @@ export class Weather extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props)
         this.props.requestWeatherByName(this.props.city)
     }
 
@@ -102,7 +101,6 @@ const styles = StyleSheet.create({
 });
 
 function importStateToProps(storeState) {
-    console.log(storeState)
     return {
         city: storeState.parkReducer.city,
         weatherData: storeState.weatherReducer.weatherData
