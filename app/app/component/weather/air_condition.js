@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 
-import { Divider } from "../../common/divider";
+import Divider from "../../common/divider";
 import { WeatherStyles } from '../../styles/index';
 import { AirQualityItem } from './air_quality_item';
 
@@ -89,16 +89,16 @@ export class AirCondition extends Component {
                 </View>
                 <View style={styles.detailColumnContainer}>
                     <View style={styles.detailRowContainer}>
-                        <AirQualityItem index={0} aqi={this.props.weather} />
-                        {/* <AirQualityItem index={1} aqiList={this.props.weather} />
+                        <AirQualityItem index={0} weatherData={this.props.weather} />
+                        <AirQualityItem index={1} weatherData={this.props.weather} />
                     </View>
                     <View style={styles.detailRowContainer}>
-                        <AirQualityItem index={2} aqiList={this.props.weather} />
-                        <AirQualityItem index={3} aqiList={this.props.weather} />
+                        <AirQualityItem index={2} weatherData={this.props.weather} />
+                        <AirQualityItem index={3} weatherData={this.props.weather} />
                     </View>
                     <View style={styles.detailRowContainer}>
-                        <AirQualityItem index={4} aqiList={this.props.weather} />
-                        <AirQualityItem index={5} aqiList={this.props.weather} /> */}
+                        <AirQualityItem index={4} weatherData={this.props.weather} />
+                        <AirQualityItem index={5} weatherData={this.props.weather} />
                     </View>
                 </View>
             </View>

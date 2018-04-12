@@ -16,9 +16,10 @@ import {
     ImageBackground,
     ActivityIndicator
 } from 'react-native';
+import { connect } from 'react-redux';
 
 
-import { Divider } from '../../common/divider';
+import Divider from '../../common/divider';
 import { AqiItem } from './model/aqi_item_info';
 
 
@@ -32,19 +33,21 @@ export class AirQualityItem extends Component {
     }
 
     render() {
-        if (this.props.aqi) {
-            let aqi = this.props.aqi.aqi.city
-            if (aqi.length !== 6) {
-                return this._renderLoading();
-            } else {
-                this.aqiList.push(new AqiItem('CO', aqi.co, '一氧化碳', 'mg/m³'));
-                this.aqiList.push(new AqiItem('NO2', aqi.no2, '二氧化氮', 'μg/m³'));
-                this.aqiList.push(new AqiItem('O³', aqi.o3, '臭氧', 'μg/m³'));
-                this.aqiList.push(new AqiItem('PM10', aqi.pm10, '可吸入颗粒物', 'μg/m²'));
-                this.aqiList.push(new AqiItem('PM2.5', aqi.pm25, '可入肺颗粒', 'μg/m³'));
-                this.aqiList.push(new AqiItem('PM10', aqi.so2, '二氧化硫', 'μg/m³'));
-                return this._renderContent(aqi);
-            }
+        let aqi;
+        if (this.props.weatherData) {
+            let weatherData = this.props.weatherData;
+            aqi = weatherData.aqi.city
+        }
+        if (aqi) {
+            this.aqiList.push(new AqiItem('CO', aqi.co, '一氧化碳', 'mg/m³'));
+            this.aqiList.push(new AqiItem('NO2', aqi.no2, '二氧化氮', 'μg/m³'));
+            this.aqiList.push(new AqiItem('O³', aqi.o3, '臭氧', 'μg/m³'));
+            this.aqiList.push(new AqiItem('PM10', aqi.pm10, '可吸入颗粒物', 'μg/m²'));
+            this.aqiList.push(new AqiItem('PM2.5', aqi.pm25, '可入肺颗粒', 'μg/m³'));
+            this.aqiList.push(new AqiItem('PM10', aqi.so2, '二氧化硫', 'μg/m³'));
+            return this._renderContent(this.aqiList);
+        } else {
+            return this._renderLoading();
         }
     }
 

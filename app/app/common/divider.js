@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 
-export class Divider extends Component {
+export default class Divider extends Component {
 
     // 构造函数
     constructor(props) {

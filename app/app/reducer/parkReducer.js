@@ -8,17 +8,7 @@ let initState = {
         longitude: 113.981718,
         latitude: 22.542449
     },
-    trafficEnabled: false,
-    baiduHeatMapEnabled: false,
-    markers: [{
-        longitude: 113.981718,
-        latitude: 22.542449,
-        title: "Window of the world"
-    }, {
-        longitude: 113.995516,
-        latitude: 22.537642,
-        title: ""
-    }]
+    marker:null,
 }
 
 export function parkReducer(oldState = initState, action) {
@@ -32,12 +22,12 @@ export function parkReducer(oldState = initState, action) {
         case 'getCurrentPosition_Success':
             var obj = Object.assign({}, oldState, {
                 city: action.position.data.city,
-                zoom: 18,
-                markers: [{
+                zoom: 15,
+                marker:{
                     latitude: action.position.data.latitude,
                     longitude: action.position.data.longitude,
                     title: '我的位置'
-                }],
+                },
                 center: {
                     latitude: action.position.data.latitude,
                     longitude: action.position.data.longitude,

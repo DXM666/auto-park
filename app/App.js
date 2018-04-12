@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { TabNavigator, StackNavigator } from 'react-navigation'
 import { ParkScreen } from "./app/component/park/ParkScreen";
+import { Examples } from "./app/component/park/example/examples"
 import { MusicScreen } from "./app/component/music/MusicScreen";
 import { WeatherScreen } from "./app/component/weather/WeatherScreen";
 import { MyScreen } from "./app/component/my/MyScreen";
@@ -31,7 +32,7 @@ const SimpleApp = TabNavigator({
   Home: {
     screen: ParkScreen,
     navigationOptions: {
-      header: false,
+      // header: false,
       tabBarLabel: '首页',
       tabBarIcon: (
         <Image source={{ uri: img1_base64 }} />
@@ -72,7 +73,7 @@ const SimpleApp = TabNavigator({
     tabBarPosition: 'bottom',
     showIcon: true
   })
-  
+
 export const AutoApp = StackNavigator({
   Home: {
     screen: StartPage
