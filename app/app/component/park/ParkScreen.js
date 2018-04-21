@@ -13,8 +13,6 @@ import {
   Button
 } from 'react-native';
 import { MapView } from 'react-native-amap3d';
-
-
 import parkstyles from '../../styles/parkStyles'
 
 export class ParkScreen extends Component {
@@ -41,25 +39,26 @@ export class ParkScreen extends Component {
     }
   }
 
+  park_latitude = [];
+  park_longitude = [];
+  park_name = [];
+  park_distance = [];
+  park = [];
+
   state = {
     time: new Date(),
-    showsCompass: false,    //指南针
-    showsScale: true,    //比例尺
-    showsZoomControls: true,    //缩放
-    showsLocationButton: false,    //定位
     logs: [],
-    zoomEnabled: true,
-    scrollEnabled: true,
-    rotateEnabled: true,
-    tiltEnabled: true,
+    latitude: 39.90980,
+    longitude: 116.37296,
+    // park: []
   }
 
   _animatedToZGC = () => {
     this.mapView.animateTo({
-      tilt: 45,
-      rotation: 90,
-      zoomLevel: 18,
-      coordinate: {
+      tilt: 30,    //倾斜度
+      rotation: 90,    //旋转角度
+      zoomLevel: 18,    //缩放级别
+      coordinate: {    //中心坐标
         latitude: 39.97837,
         longitude: 116.31363,
       },
@@ -79,50 +78,67 @@ export class ParkScreen extends Component {
     })
   }
 
-  //绘制圆形
-  // coordinate = {
-  //   latitude: 39.906901,
-  //   longitude: 116.397972,
-  // }
-
-
-  //记录事件
-  // _log(event, data) {
-  //   this.setState({
-  //     logs: [
-  //       {
-  //         key: Date.now(),
-  //         time: new Date().toLocaleString(),
-  //         event,
-  //         data: JSON.stringify(data, null, 2),
-  //       },
-  //       ...this.state.logs,
-  //     ],
-  //   })
-  // }
-
-  // _logPressEvent = ({ nativeEvent }) => this._log('onPress', nativeEvent)
-  // _logLongPressEvent = ({ nativeEvent }) => this._log('onLongPress', nativeEvent)
-  // _logLocationEvent = ({ nativeEvent }) => this._log('onLocation', nativeEvent)
-  // _logStatusChangeEvent = ({ nativeEvent }) => this._log('onStatusChange', nativeEvent)
-  // _logStatusChangeCompleteEvent = ({ nativeEvent }) => this._log('onStatusChangeComplete', nativeEvent)
-
-  // _renderItem = ({ item }) =>
-  //   <Text style={styles.logText}>{item.time} {item.event}: {item.data}</Text>
-
   componentDidMount() {
     this.mounted = true
-    setInterval(() => {
-      if (this.mounted) {
-        this.setState({ time: new Date() })
-      }
-    }, 1000)
+    // setInterval(() => {
+    //   if (this.mounted) {
+    //     this.setState({ time: new Date() })
+    //   }
+    // }, 1000)
   }
 
   componentWillUnmount() {
     this.mounted = false;
   }
 
+  componentDidUpdate() {
+    let url = "http://restapi.amap.com/v3/place/around?key=a83dc06f627f2c8a9adf5bc046883497&location=" + `${this.state.longitude},${this.state.latitude}` + "&keywords=停车场&types=&offset=&page=&extensions=all";
+    // let url = "http://restapi.amap.com/v3/geocode/regeo?key=a83dc06f627f2c8a9adf5bc046883497&location=" + `${this.state.longitude},${this.state.latitude}` + "&poitype=停车场&radius=3000&extensions=all&batch=false&roadlevel=0"
+    fetch(url)
+      .then(
+        (resp) => {
+          return resp.json()
+        }
+      )
+      .then(
+        (response) => {
+          // console.log(response)
+          this.setState(
+            {
+              park: response.pois
+            }
+          )
+        }
+      )
+      .catch(
+        (error) => {
+          alert('数据请求失败，请稍后再试')
+        }
+      )
+  }
+
+
+  Park_distance = (longitude, latitude, park) => {
+    let url = "http://restapi.amap.com/v3/direction/driving?key=a83dc06f627f2c8a9adf5bc046883497&origin=" + `${this.state.longitude},${this.state.latitude}` + "&destination=" + `${longitude},${latitude}` + "&originid=&destinationid=&extensions=base&strategy=0&waypoints=&avoidpolygons=&avoidroad=";
+    fetch(url)
+      .then(
+        (resp) => {
+          return resp.json()
+        }
+      )
+      .then(
+        (response) => {
+          this.park_distance.push("距离您"+`${response.route.paths[0].distance}` + "m")
+          // return `${response.route.paths[0].distance}` + "m"
+        }
+      )
+      .catch(
+        (error) => {
+          console.log(error)
+          alert('数据请求失败，请稍后再试')
+        }
+      )
+  }
   _coordinates = [
     {
       latitude: 39.806901,
@@ -147,133 +163,47 @@ export class ParkScreen extends Component {
   _onDragEvent = ({ nativeEvent }) => Alert.alert(`${nativeEvent.latitude}, ${nativeEvent.longitude}`)
 
   render() {
+    if (this.state.park) {
+      for (let i = 0; i < this.state.park.length; i++) {
+        this.park_longitude.push(parseFloat(this.state.park[i].location.split(',')[0]))
+        this.park_latitude.push(parseFloat(this.state.park[i].location.split(',')[1]))
+        this.park_name.push(this.state.park[i].name)
+      }
+    }
     return (
       <View style={styles.body}>
-        {/* <Button
-          style={{ padding: 5, position: 'absolute', left: 10, bottom: 20, backgroundColor: '#fff', justifyContent: 'center', borderRadius: 3, borderWidth: StyleSheet.hairlineWidth, borderColor: '#ffffff', justifyContent: 'center', }}
-          onPress={() => {
-            AMapLocation.init(null)
-            AMapLocation.getLocation()
-            //this._activityIndicator.setState({ visible: true,})
-          }}>
-          <Text>hello</Text>
-        </Button> */}
-        <View style={parkstyles.controls}>
-          <View style={parkstyles.control}>
-            <Text>旋转</Text>
-            <Switch
-              style={parkstyles.switch}
-              onValueChange={rotateEnabled => this.setState({ rotateEnabled })}
-              value={this.state.rotateEnabled}
-            />
-          </View>
-          <View style={parkstyles.control}>
-            <Text>滑动</Text>
-            <Switch
-              style={parkstyles.switch}
-              onValueChange={scrollEnabled => this.setState({ scrollEnabled })}
-              value={this.state.scrollEnabled}
-            />
-          </View>
-          <View style={parkstyles.control}>
-            <Text>缩放</Text>
-            <Switch
-              style={parkstyles.switch}
-              onValueChange={zoomEnabled => this.setState({ zoomEnabled })}
-              value={this.state.zoomEnabled}
-            />
-          </View>
-          <View style={parkstyles.control}>
-            <Text>倾斜</Text>
-            <Switch
-              style={parkstyles.switch}
-              onValueChange={tiltEnabled => this.setState({ tiltEnabled })}
-              value={this.state.tiltEnabled}
-            />
-          </View>
-        </View>
-
-        <View style={parkstyles.controls}>
-          <View style={parkstyles.control}>
-            <Text>指南针</Text>
-            <Switch
-              style={parkstyles.switch}
-              onValueChange={showsCompass => this.setState({ showsCompass })}
-              value={this.state.showsCompass}
-            />
-          </View>
-          <View style={parkstyles.control}>
-            <Text>比例尺</Text>
-            <Switch
-              style={parkstyles.switch}
-              onValueChange={showsScale => this.setState({ showsScale })}
-              value={this.state.showsScale}
-            />
-          </View>
-          <View style={parkstyles.control}>
-            <Text>定位</Text>
-            <Switch
-              style={parkstyles.switch}
-              onValueChange={showsLocationButton => this.setState({ showsLocationButton })}
-              value={this.state.showsLocationButton}
-            />
-          </View>
-          <View style={parkstyles.control}>
-            <Text>缩放</Text>
-            <Switch
-              style={parkstyles.switch}
-              onValueChange={showsZoomControls => this.setState({ showsZoomControls })}
-              value={this.state.showsZoomControls}
-            />
-          </View>
-        </View>
-
         <MapView
           mapType={this.props.navigation.state.params.mapType}
+          region={{
+            latitude: this.state.latitude,
+            longitude: this.state.longitude,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
+          }}
           style={StyleSheet.absoluteFill}
           ref={ref => this.mapView = ref}
-          ref={ref => this.mapView = ref}
-          locationEnabled={this.state.showsLocationButton}
-          showsCompass={this.state.showsCompass}
-          showsScale={this.state.showsScale}
-          showsLocationButton={this.state.showsLocationButton}
-          showsZoomControls={this.state.showsZoomControls}
+          locationEnabled={true}
+          showsCompass={true}    //指南针
+          showsScale={true}    //比例尺
+          showsLocationButton={true}    //定位
+          showsZoomControls={true}    //缩放
           style={parkstyles.map}
-
-          zoomEnabled={this.state.zoomEnabled}
-          scrollEnabled={this.state.scrollEnabled}
-          rotateEnabled={this.state.rotateEnabled}
-          tiltEnabled={this.state.tiltEnabled}
-
-          onLocation={({ nativeEvent }) =>
-            console.log(`${nativeEvent.latitude}, ${nativeEvent.longitude}`)}
-
-        // coordinate={{
-        //   latitude: 39.90980,
-        //   longitude: 116.37296,
-        // }}
-        // zoomLevel={18}
-        // showsIndoorMap
-        // tilt={45}
-
-        // locationInterval={10000}
-        // distanceFilter={10}
-        // onPress={this._logPressEvent}
-        // onLongPress={this._logLongPressEvent}
-        // onLocation={this._logLocationEvent}
-        // onStatusChange={this._logStatusChangeEvent}
-        // onStatusChangeComplete={this._logStatusChangeCompleteEvent}
-        // style={styles.body}
+          zoomEnabled={true}    //缩放
+          scrollEnabled={true}    //滑动
+          rotateEnabled={true}    //旋转
+          tiltEnabled={true}    //倾斜
+          locationInterval={50000}
+          distanceFilter={50}
+          onLocation={({ nativeEvent }) => {
+            this.setState(
+              {
+                latitude: nativeEvent.latitude,
+                longitude: nativeEvent.longitude
+              }
+            )
+          }}
         >
 
-          {/* 绘制圆形 */}
-          {/* <MapView.Circle
-            strokeWidth={5}
-            strokeColor="rgba(0, 0, 255, 0.5)"
-            fillColor="rgba(255, 0, 0, 0.5)"
-            radius={10000}
-            coordinate={this.coordinate}
-          /> */}
 
           <MapView.Marker
             active
@@ -301,6 +231,35 @@ export class ParkScreen extends Component {
             coordinate={this._coordinates[2]}
           />
 
+          {
+            this.state.park ?
+              this.state.park.map((i, index) => {
+                this.Park_distance(this.park_longitude[index], this.park_latitude[index], this.park_name[index])
+                return (
+                  <MapView.Marker
+                    active
+                    key={index}
+                    title={this.park_name[index]}
+                    // onPress={this._onMarkerPress}
+                    coordinate={
+                      {
+                        latitude: this.park_latitude[index],
+                        longitude: this.park_longitude[index],
+                      }
+                    }
+                    description={this.park_distance[index]}
+                  >
+                    <TouchableOpacity activeOpacity={0.9} onPress={this._onInfoWindowPress}>
+                      <View style={styles.customInfoWindow}>
+
+                        <Text>{this.state.time.toLocaleTimeString()}</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </MapView.Marker>
+                )
+              }) : null
+          }
+
           <MapView.Marker
             title="自定义 View"
             icon={() => (
@@ -311,12 +270,6 @@ export class ParkScreen extends Component {
             coordinate={this._coordinates[3]}
           />
         </MapView>
-
-        {/* <FlatList
-          style={styles.logs}
-          data={this.state.logs}
-          renderItem={this._renderItem}
-        /> */}
 
         <View style={styles.buttons}>
           <View style={styles.button}>
