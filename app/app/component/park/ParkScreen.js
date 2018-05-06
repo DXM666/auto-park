@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { MapView } from 'react-native-amap3d';
 import parkstyles from '../../styles/parkStyles'
+import { TWebView } from '../../common/twebview'
 
 export class ParkScreen extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -50,6 +51,7 @@ export class ParkScreen extends Component {
     logs: [],
     latitude: 39.90980,
     longitude: 116.37296,
+    parkDistance: false
     // park: []
   }
 
@@ -91,7 +93,7 @@ export class ParkScreen extends Component {
     this.mounted = false;
   }
 
-  componentDidUpdate() {
+  Park_parkname = () => {
     let url = "http://restapi.amap.com/v3/place/around?key=a83dc06f627f2c8a9adf5bc046883497&location=" + `${this.state.longitude},${this.state.latitude}` + "&keywords=停车场&types=&offset=&page=&extensions=all";
     // let url = "http://restapi.amap.com/v3/geocode/regeo?key=a83dc06f627f2c8a9adf5bc046883497&location=" + `${this.state.longitude},${this.state.latitude}` + "&poitype=停车场&radius=3000&extensions=all&batch=false&roadlevel=0"
     fetch(url)
@@ -112,7 +114,7 @@ export class ParkScreen extends Component {
       )
       .catch(
         (error) => {
-          alert('数据请求失败，请稍后再试')
+          alert('停车场数据请求失败，请稍后再试')
         }
       )
   }
@@ -128,17 +130,22 @@ export class ParkScreen extends Component {
       )
       .then(
         (response) => {
-          this.park_distance.push("距离您"+`${response.route.paths[0].distance}` + "m")
+          if (response.status == 1) {
+            console.log(response)
+            this.park_distance.push("距离您" + `${response.route.paths[0].distance}` + "m")
+          }
+
           // return `${response.route.paths[0].distance}` + "m"
         }
       )
       .catch(
         (error) => {
           console.log(error)
-          alert('数据请求失败，请稍后再试')
+          alert('距离数据请求失败，请稍后再试')
         }
       )
   }
+
   _coordinates = [
     {
       latitude: 39.806901,
@@ -158,6 +165,25 @@ export class ParkScreen extends Component {
     },
   ]
 
+  _line3 = [
+    {
+      latitude: 24.856776,
+      longitude: 102.858748,
+    },
+    {
+      latitude: 24.856817,
+      longitude: 102.858727,
+    },
+    {
+      latitude: 24.856731,
+      longitude: 102.858322,
+    },
+    {
+      latitude: 24.856535,
+      longitude: 102.857399,
+    },
+  ]
+  _onPress = () => Alert.alert('onPress')
   _onMarkerPress = () => Alert.alert('onPress')
   _onInfoWindowPress = () => Alert.alert('onInfoWindowPress')
   _onDragEvent = ({ nativeEvent }) => Alert.alert(`${nativeEvent.latitude}, ${nativeEvent.longitude}`)
@@ -192,44 +218,19 @@ export class ParkScreen extends Component {
           scrollEnabled={true}    //滑动
           rotateEnabled={true}    //旋转
           tiltEnabled={true}    //倾斜
-          locationInterval={50000}
+          locationInterval={500000}
           distanceFilter={50}
           onLocation={({ nativeEvent }) => {
             this.setState(
               {
                 latitude: nativeEvent.latitude,
                 longitude: nativeEvent.longitude
+              }, () => {
+                this.Park_parkname()
               }
             )
           }}
         >
-
-
-          <MapView.Marker
-            active
-            draggable
-            title="一个可拖拽的标记"
-            description={this.state.time.toLocaleTimeString()}
-            onDragEnd={this._onDragEvent}
-            onInfoWindowPress={this._onInfoWindowPress}
-            coordinate={this._coordinates[0]}
-          />
-
-          <MapView.Marker color="green" coordinate={this._coordinates[1]} >
-            <TouchableOpacity activeOpacity={0.9} onPress={this._onInfoWindowPress}>
-              <View style={styles.customInfoWindow}>
-                <Text>自定义信息窗口</Text>
-                <Text>{this.state.time.toLocaleTimeString()}</Text>
-              </View>
-            </TouchableOpacity>
-          </MapView.Marker>
-
-          <MapView.Marker
-            image="flag"
-            title="自定义图片"
-            onPress={this._onMarkerPress}
-            coordinate={this._coordinates[2]}
-          />
 
           {
             this.state.park ?
@@ -237,7 +238,7 @@ export class ParkScreen extends Component {
                 this.Park_distance(this.park_longitude[index], this.park_latitude[index], this.park_name[index])
                 return (
                   <MapView.Marker
-                    active
+                    image='park'
                     key={index}
                     title={this.park_name[index]}
                     // onPress={this._onMarkerPress}
@@ -247,31 +248,41 @@ export class ParkScreen extends Component {
                         longitude: this.park_longitude[index],
                       }
                     }
-                    description={this.park_distance[index]}
+                  description={this.park_distance[index]}
                   >
-                    <TouchableOpacity activeOpacity={0.9} onPress={this._onInfoWindowPress}>
+                    {/* <View>
+                      <Text>{this.park_name[index]}</Text>
+                      <Text>{this.park_distance[index]}</Text>
+                      <Button
+                        title='导航'
+                        onPress={() => {
+                          <View>
+                            <TWebView url={"http://uri.amap.com/navigation?from=116.478346,39.997361,startpoint&to=116.3246,39.966577,endpoint&via=116.402796,39.936915,midwaypoint&mode=car&policy=1&src=mypage&coordinate=gaode&callnative=0"} />
+                          </View>
+                        }}
+                      />
+                    </View> */}
+                    {/* <TouchableOpacity activeOpacity={0.9} onPress={this._onInfoWindowPress}>
                       <View style={styles.customInfoWindow}>
 
                         <Text>{this.state.time.toLocaleTimeString()}</Text>
                       </View>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                   </MapView.Marker>
                 )
               }) : null
           }
 
-          <MapView.Marker
-            title="自定义 View"
-            icon={() => (
-              <View style={styles.customMarker}>
-                <Text style={styles.markerText}>{this.state.time.toLocaleTimeString()}</Text>
-              </View>
-            )}
-            coordinate={this._coordinates[3]}
-          />
+          {/* <MapView.Polyline
+            gradient
+            width={5}
+            colors={['#f44336', '#2196f3', '#4caf50']}
+            onPress={this._onPress}
+            coordinates={this._line3}
+          /> */}
         </MapView>
 
-        <View style={styles.buttons}>
+        {/* <View style={styles.buttons}>
           <View style={styles.button}>
             <TouchableOpacity onPress={this._animatedToZGC}>
               <Text style={styles.text}>中关村</Text>
@@ -282,7 +293,7 @@ export class ParkScreen extends Component {
               <Text style={styles.text}>天安门</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </View> */}
       </View>
     )
   }

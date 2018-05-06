@@ -1,7 +1,7 @@
 let initState = {
     isParkLoading: false,
     isParkError: false,
-    city: '北京',
+    city: '昆明 ',
     // mayType: MapTypes.NORMAL,
     zoom: 15,
     center: {

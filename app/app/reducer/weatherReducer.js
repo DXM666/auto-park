@@ -1,7 +1,7 @@
 let initState = {
     isWeatherLoading: false,
     isWeatherError: false,
-    city: '北京',
+    city: '昆明',
     weatherData:''
 }
 

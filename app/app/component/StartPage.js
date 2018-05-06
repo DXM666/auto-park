@@ -4,7 +4,8 @@ import {
     StyleSheet,
     Text,
     View,
-    Image
+    Image,
+    Dimensions
 } from 'react-native';
 import { StackNavigator } from "react-navigation";
 
@@ -17,13 +18,13 @@ export class StartPage extends Component {
         setTimeout(
             () => {
                 replace('HomePage')
-            }, 2000
+            }, 3000
         )
     }
     render() {
         return (
             <View>
-                <Image source={require('../img/timg.jpg')} />
+                <Image source={require('../img/timg.jpg')} style={{width:Dimensions.get('window').width,height:Dimensions.get('window').height}} />
             </View>
         )
     }
