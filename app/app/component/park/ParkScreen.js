@@ -23,39 +23,6 @@ import { TWebView } from '../../common/twebview';
 import { Menu } from '../menu/Menu';
 
 export class ParkScreen extends Component {
-  // static navigationOptions = ({ navigation }) => {
-  //   const { state, setParams } = navigation
-  //   state.params = state.params || { mapType: 'standard' }
-  //   const props = {
-  //     mode: 'dropdown',
-  //     style: { width: 100 },
-  //     selectedValue: state.params.mapType,
-  //     onValueChange: mapType => setParams({ mapType }),
-  //   }
-  //   return {
-  //     // title: '地图模式',
-  //     // headerLeft: (
-  //     //   <TouchableNativeFeedback
-  //     //     onPress={()=>{
-  //     //       console.log('1')
-  //     //       // this.setState({
-  //     //       //   sideMenu:true
-  //     //       // })
-  //     //     }}>
-  //     //     <Icon name='md-menu' color={'black'} size={30} style={{ backgroundColor: 'transparent', margin: 10 }} />
-  //     //   </TouchableNativeFeedback>
-  //     // ),
-  //     headerRight: (
-  //       <Picker {...props}>
-  //         <Picker.Item label="标准" value="standard" />
-  //         <Picker.Item label="卫星" value="satellite" />
-  //         <Picker.Item label="导航" value="navigation" />
-  //         <Picker.Item label="夜间" value="night" />
-  //         <Picker.Item label="公交" value="bus" />
-  //       </Picker>
-  //     ),
-  //   }
-  // }
 
   static navigationOptions = {
     header: false
@@ -70,24 +37,12 @@ export class ParkScreen extends Component {
   state = {
     sideMenu: false,
     weatherside:false,
-    time: new Date(),
-    logs: [],
     latitude: 39.90980,
     longitude: 116.37296,
     parkDistance: false
   }
 
   componentDidMount() {
-    fetch('http://120.79.200.81:5000/',{
-      method:'GET',
-      // body:"name=lulingniu&age=40"
-    })
-  .then((res)=>{
-    return res.text()
-  })
-  .then((res)=>{
-    console.log(res)
-  })
     this.mounted = true
   }
 
@@ -176,7 +131,6 @@ export class ParkScreen extends Component {
         </View>
         <View style={styles.body}>
           <MapView
-            // mapType={this.props.navigation.state.params.mapType}
             region={{
               latitude: this.state.latitude,    //用户所在位置的纬度
               longitude: this.state.longitude,    //用户所在位置的经度
@@ -296,10 +250,6 @@ const styles = StyleSheet.create({
   },
   markerText: {
     color: '#fff',
-  },
-  logs: {
-    elevation: 8,
-    backgroundColor: '#fff',
   },
   logText: {
     paddingLeft: 15,
