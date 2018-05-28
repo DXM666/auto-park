@@ -13,17 +13,17 @@ let initState = {
 
 export function parkReducer(oldState = initState, action) {
     switch (action.type) {
-        case 'getCurrentPosition_Send':
+        case 'getCurrentPosition_Send':    //发送获取位置请求
             var obj = Object.assign({}, oldState, {
-                isParkLoading: true,
-                isParkError: false
+                isParkLoading: true,    //数据正在请求
+                isParkError: false    //数据请求失败
             })
             return obj
-        case 'getCurrentPosition_Success':
+        case 'getCurrentPosition_Success':    //发送请求成功
             var obj = Object.assign({}, oldState, {
                 city: action.position.data.city,
                 zoom: 15,
-                marker:{
+                marker:{    //用户位置
                     latitude: action.position.data.latitude,
                     longitude: action.position.data.longitude,
                     title: '我的位置'
@@ -36,7 +36,7 @@ export function parkReducer(oldState = initState, action) {
                 isParkError: false
             })
             return obj
-        case 'getCurrentPosition_Error':
+        case 'getCurrentPosition_Error':    //发送求情失败
             var obj = Object.assign({}, oldState, {
                 isParkLoading: false,
                 isParkError: true
