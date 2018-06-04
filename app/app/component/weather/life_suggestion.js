@@ -29,7 +29,6 @@ export class LifeSuggestion extends Component {
     }
 
     render() {
-        console.log('1')
         return (
             <View style={styles.container}>
                 <Text style={WeatherStyles.smallNumber}>气象指数</Text>

@@ -7,6 +7,10 @@ export const WeatherStyles = {
         color: 'rgba(255,255,255,0.8)',
         fontSize: 12
     },
+    midNumber:{
+        color: 'rgba(255,255,255,0.8)',
+        fontSize: 16
+    },
     weatherIcon: {
         width: 30,
         height: 30,

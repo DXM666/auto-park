@@ -24,6 +24,7 @@ export class WeatherFuture extends Component {
     render() {
         if (this.props.weather) {
             this.dailyDataSource = this.props.weather.daily_forecast;
+            console.log(this.dailyDataSource)
         }
         return (
             <View >

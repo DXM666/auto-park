@@ -14,6 +14,8 @@
     "react-native-amap3d": "^0.12.1",
     "react-native-baidu-map": "^0.6.0",
     "react-native-cli": "^2.0.1",
+    "react-native-communications": "^2.2.1",
+    "react-native-photo-browser": "^0.4.0",
     "react-native-side-menu": "^1.1.3",
     "react-native-smart-amap": "^1.0.7",
     "react-native-vector-icons": "^4.6.0",

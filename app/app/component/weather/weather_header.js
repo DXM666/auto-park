@@ -3,13 +3,13 @@
  */
 
 import React, { Component } from 'react'
-import { 
-    StyleSheet, 
-    View, 
-    Text, 
-    Image, 
-    StatusBar, 
-    Dimensions 
+import {
+    StyleSheet,
+    View,
+    Text,
+    Image,
+    StatusBar,
+    Dimensions
 } from 'react-native';
 
 import { WeatherStyles } from '../../styles/index';
@@ -43,6 +43,7 @@ export class WeatherHeader extends Component {
             <View style={styles.contentContainer}>
                 <Text style={styles.number}>{weatherData.now.tmp + '°'} </Text>
                 <View style={styles.details}>
+                    <Text style={WeatherStyles.midNumber}>{this.props.city}</Text>
                     <Text style={WeatherStyles.smallNumber}>{weatherData.now.cond.txt}</Text>
                     <Text style={WeatherStyles.smallNumber}>{weatherData.now.wind.dir} {weatherData.now.wind.sc}级</Text>
                 </View>

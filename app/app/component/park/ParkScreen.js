@@ -14,6 +14,7 @@ import {
   StatusBar,
   TouchableNativeFeedback
 } from 'react-native';
+import { connect } from 'react-redux';
 import { MapView } from 'react-native-amap3d';
 import SideMenu from 'react-native-side-menu';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -21,8 +22,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import parkstyles from '../../styles/parkStyles';
 import { TWebView } from '../../common/twebview';
 import { Menu } from '../menu/Menu';
+import { WeatherScreen } from '../weather/WeatherScreen';
+import { getCurrentCity_Send, closeMenu } from '../../action/parkactions';
 
-export class ParkScreen extends Component {
+export class Park extends Component {
 
   static navigationOptions = {
     header: false
@@ -30,24 +33,17 @@ export class ParkScreen extends Component {
 
   park_latitude = [];
   park_longitude = [];
-  park_name = [];
-  park_distance = [];
-  park = [];
+  park_name = [];    //停车场名称
+  park_distance = [];    //停车场距离
+  park = [];    //停车场数据
 
   state = {
     sideMenu: false,
-    weatherside:false,
+    weatherMenu: false,
+    weatherside: false,
     latitude: 39.90980,
     longitude: 116.37296,
     parkDistance: false
-  }
-
-  componentDidMount() {
-    this.mounted = true
-  }
-
-  componentWillUnmount() {
-    this.mounted = false;
   }
 
   Park_parkname = () => {
@@ -104,6 +100,7 @@ export class ParkScreen extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const menu = <Menu navigation={this.props.navigation} style={{ marginTop: 22 }} />;    //创建的Menu组件
+    const weathermenu = <WeatherScreen navigation={this.props.navigation} style={{ marginTop: 22 }} />
     if (this.state.park) {
       for (let i = 0; i < this.state.park.length; i++) {
         this.park_longitude.push(parseFloat(this.state.park[i].location.split(',')[0]))
@@ -113,20 +110,26 @@ export class ParkScreen extends Component {
     }
     return (
       <SideMenu
-        isOpen={this.state.sideMenu}
+        isOpen={this.state.sideMenu && this.props.info}
         menu={menu}                    //抽屉内的组件
         disableGestures={this.state.sideMenu ? false : true}
       >
-      
-        {/* <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true}/> */}
-        <View style={styles.headerTop}>
+        <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true} />
+        <View style={{ flexDirection: 'row', width: Dimensions.get('window').width }}>
           <TouchableNativeFeedback
             onPress={() => {
               this.setState({
-                sideMenu: this.state.sideMenu ? false : true
+                sideMenu: this.state.sideMenu && this.props.info ? false : true
               })
+              this.props.closeMenu(true)
             }}>
             <Icon name='md-menu' color={'black'} size={30} style={{ backgroundColor: 'white', padding: 10 }} />
+          </TouchableNativeFeedback>
+          <TouchableNativeFeedback
+            onPress={() => {
+              navigate('WeatherScreen')
+            }}>
+            <Icon name='md-partly-sunny' color={'black'} size={30} style={{ backgroundColor: 'white', padding: 10, paddingRight: 20, paddingLeft: Dimensions.get('window').width - 80 }} />
           </TouchableNativeFeedback>
         </View>
         <View style={styles.body}>
@@ -158,11 +161,11 @@ export class ParkScreen extends Component {
                   longitude: nativeEvent.longitude
                 }, () => {
                   this.Park_parkname()
+                  this.props.getCurrentCity(this.state.longitude, this.state.latitude)
                 }
               )
             }}
           >
-
             {
               this.state.park ?
                 this.state.park.map((i, index) => {    //遍历停车场数据，依次显示停车场信息
@@ -190,7 +193,7 @@ export class ParkScreen extends Component {
                           activeOpacity={0.9}
                           onPress={
                             () => {
-                              navigate('ParkInfo')
+                              navigate('ParkInfo', { parkname: this.park_name[index] })
                             }
                           }
                         >
@@ -258,3 +261,20 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
 })
+
+function importStateToProps(storeState) {
+  return {
+    info: storeState.weatherReducer.info
+  }
+}
+
+function importActionToProps(dispatch) {
+  return {
+    getCurrentCity: (longitude, latitude) => {
+      dispatch(getCurrentCity_Send(dispatch, longitude, latitude))
+    },
+    closeMenu: (data) => { dispatch(closeMenu(data)) }
+  }
+}
+
+export const ParkScreen = connect(importStateToProps, importActionToProps)(Park)

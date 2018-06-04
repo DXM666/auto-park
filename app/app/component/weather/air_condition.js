@@ -50,7 +50,6 @@ export class AirCondition extends Component {
     };
 
     render() {
-        console.log(this.props)
         let marginLeftValue = 50;
         // if (!this.props.weather.loading) {
         if (this.props.weather) {
@@ -93,6 +92,7 @@ export class AirCondition extends Component {
                         <AirQualityItem index={1} weatherData={this.props.weather} />
                     </View>
                     <View style={styles.detailRowContainer}>
+                    
                         <AirQualityItem index={2} weatherData={this.props.weather} />
                         <AirQualityItem index={3} weatherData={this.props.weather} />
                     </View>

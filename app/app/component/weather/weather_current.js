@@ -50,6 +50,7 @@ export class WeatherCurrent extends Component {
         )
     };
     _renderItem = ({ item }) => {
+        console.log(item)
         let iconUrl = Config.iconApi + Object(item.cond).code + '.png';
         return (
             <View style={styles.futureItem}>
