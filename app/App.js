@@ -44,5 +44,5 @@ export const AutoApp = StackNavigator({
   },
   MyWallet: {
     screen: MyWallet    //我的钱包
-  }
+  } 
 })
