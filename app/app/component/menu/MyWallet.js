@@ -1,14 +1,27 @@
 /*
- * 设置界面
+ * 我的钱包
  */
 
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, StatusBar, ScrollView, TouchableNativeFeedback, TouchableHighlight, Image, Alert, Linking, Platform } from 'react-native'
+import {
+    Text,
+    View,
+    StyleSheet,
+    StatusBar,
+    ScrollView,
+    TouchableNativeFeedback,
+    TouchableHighlight,
+    Image,
+    Alert,
+    Linking,
+    Platform
+} from 'react-native';
+import { connect } from 'react-redux';
 
 import Icon from 'react-native-vector-icons/Ionicons'
 import Divider from '../../common/divider'
 
-export class MyWallet extends Component {
+export class Wallet extends Component {
     static navigationOptions = {
         title: '我的钱包',
         headerStyle: {
@@ -44,7 +57,7 @@ export class MyWallet extends Component {
                 <View style={[styles.itemContainer, { marginTop: 50 }]}>
                     <Text style={styles.text}>钱包余额</Text>
                     <View style={{ marginRight: 20, flexDirection: 'row' }}>
-                        <Text style={{ paddingRight: 10 }}>100.00元</Text>
+                        <Text style={{ paddingRight: 10 }}>{100.00 - this.props.purse}元</Text>
                         <Icon name='ios-arrow-forward-outline' color={'rgb(54,57,66)'} size={15}
                             style={{ backgroundColor: 'transparent', }} />
                     </View>
@@ -89,3 +102,13 @@ const styles = StyleSheet.create({
         fontSize: 15
     },
 });
+
+function importStateToProps(storeState) {
+    console.log(storeState)
+    return {
+        purse: storeState.weatherReducer.purse
+    }
+}
+
+
+export const MyWallet = connect(importStateToProps)(Wallet)

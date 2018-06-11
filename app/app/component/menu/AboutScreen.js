@@ -1,5 +1,5 @@
 /*
- * 设置界面
+ * 关于界面
  */
 
 import React, { Component } from 'react'

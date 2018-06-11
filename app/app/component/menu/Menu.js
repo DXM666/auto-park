@@ -1,3 +1,7 @@
+/*
+ * 菜单页
+ */
+
 import React, { Component } from 'react'
 import {
     Alert,
@@ -79,9 +83,6 @@ export class SideMenu extends Component {
                                         parkname: this.props.parkname,
                                         park1: this.props.park1,
                                         park2: this.props.park2,
-                                        park3: this.props.park3,
-                                        park4: this.props.park4,
-                                        park5: this.props.park5,
                                         time: this.props.time,
                                         reserve: true,  //预约成功后车位无法点击
                                         park: true,    //预约成功后显示车锁开关
@@ -159,10 +160,7 @@ function importStateToProps(storeState) {
     return {
         parkname: storeState.weatherReducer.parkname,
         park1: storeState.weatherReducer.park1,
-        park1: storeState.weatherReducer.park1,
-        park1: storeState.weatherReducer.park1,
-        park1: storeState.weatherReducer.park1,
-        park1: storeState.weatherReducer.park1,
+        park2: storeState.weatherReducer.park2,
         time: storeState.weatherReducer.time,
     }
 }

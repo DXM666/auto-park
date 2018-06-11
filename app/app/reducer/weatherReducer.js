@@ -9,10 +9,8 @@ let initState = {
     parkname: '',
     park1: false,
     park2: false,
-    park3: false,
-    park4: false,
-    park5: false,
-    time: ''
+    time: '',
+    purse: 0
 }
 
 export function weatherReducer(oldState = initState, action) {
@@ -65,10 +63,12 @@ export function weatherReducer(oldState = initState, action) {
                 parkname: action.info.parkname,
                 park1: action.info.park1,
                 park2: action.info.park2,
-                park3: action.info.park3,
-                park4: action.info.park4,
-                park5: action.info.park5,
                 time: action.info.time
+            })
+            return obj
+        case 'purseBalance':
+            var obj = Object.assign({}, oldState, {
+                purse: action.data
             })
             return obj
     }

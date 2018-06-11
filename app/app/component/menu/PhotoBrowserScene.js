@@ -1,3 +1,7 @@
+/*
+ * 用户头像
+ */
+
 import PhotoBrowser from 'react-native-photo-browser';
 import React, { Component } from 'react';
 

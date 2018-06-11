@@ -1,3 +1,7 @@
+/*
+ * 车位预约界面
+ */
+
 import React, { Component } from 'react'
 import {
     Alert,
@@ -18,7 +22,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import Divider from '../../common/divider';
 import { connect } from 'react-redux';
-import { orderInfo } from '../../action/parkactions';
+import { orderInfo, purseBalance } from '../../action/parkactions';
 
 
 export class ParkInfoScreen extends Component {
@@ -56,15 +60,12 @@ export class ParkInfoScreen extends Component {
             park: false,    //预约成功后显示车锁开关
             lock: false,    //车锁开关
             choosePark11: false,    //预约成功后更换状态
-            choosePark13: false,
             choosePark22: false,
-            choosePark31: false,
-            choosePark33: false
         }
     }
 
     setTime = (time) => {
-        console.log(time)
+        //停车计时
         setInterval(
             () => {
                 var reserveHour
@@ -81,6 +82,7 @@ export class ParkInfoScreen extends Component {
     }
     render() {
         const { params } = this.props.navigation.state;
+        const { navigate } = this.props.navigation;
         if (params.time) {
             this.setTime(params.time)
         }
@@ -124,33 +126,7 @@ export class ParkInfoScreen extends Component {
                         }
                     </TouchableOpacity>
                     <Image source={require('../../img/on.png')} />
-                    <TouchableOpacity
-                        disabled={this.state.reserve || params.reserve ? 'true' : ''}
-                        onPress={
-                            () => {
-                                Alert.alert('', '是否选择车位',
-                                    [
-                                        {
-                                            text: '是', onPress: () => {
-                                                ToastAndroid.show('预约成功！', ToastAndroid.SHORT)
-                                                this.setState({
-                                                    park: true,
-                                                    reserve: true,
-                                                    choosePark13: true
-                                                })
-                                            }
-                                        },
-                                        { text: '否' }
-                                    ]
-                                )
-                            }
-                        }
-                    >
-                        {this.state.choosePark13 || params.park2 ?
-                            <Image source={require('../../img/reserve.png')} /> :
-                            <Image source={require('../../img/out.png')} />
-                        }
-                    </TouchableOpacity>
+                    <Image source={require('../../img/on.png')} />
                 </View>
                 <View style={{ flexDirection: 'row' }}>
                     <Image source={require('../../img/on.png')} />
@@ -176,7 +152,7 @@ export class ParkInfoScreen extends Component {
                             }
                         }
                     >
-                        {this.state.choosePark22 || params.park3 ?
+                        {this.state.choosePark22 || params.park2 ?
                             <Image source={require('../../img/reserve.png')} /> :
                             <Image source={require('../../img/out.png')} />
                         }
@@ -184,61 +160,9 @@ export class ParkInfoScreen extends Component {
                     <Image source={require('../../img/on.png')} />
                 </View>
                 <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity
-                        disabled={this.state.reserve || params.reserve ? 'true' : ''}
-                        onPress={
-                            () => {
-                                Alert.alert('', '是否选择车位',
-                                    [
-                                        {
-                                            text: '是', onPress: () => {
-                                                ToastAndroid.show('预约成功！', ToastAndroid.SHORT)
-                                                this.setState({
-                                                    park: true,
-                                                    reserve: true,
-                                                    choosePark31: true
-                                                })
-                                            }
-                                        },
-                                        { text: '否' }
-                                    ]
-                                )
-                            }
-                        }
-                    >
-                        {this.state.choosePark31 || params.park4 ?
-                            <Image source={require('../../img/reserve.png')} /> :
-                            <Image source={require('../../img/out.png')} />
-                        }
-                    </TouchableOpacity>
                     <Image source={require('../../img/on.png')} />
-                    <TouchableOpacity
-                        disabled={this.state.reserve || params.reserve ? 'true' : ''}
-                        onPress={
-                            () => {
-                                Alert.alert('', '是否选择车位',
-                                    [
-                                        {
-                                            text: '是', onPress: () => {
-                                                ToastAndroid.show('预约成功！', ToastAndroid.SHORT)
-                                                this.setState({
-                                                    park: true,
-                                                    reserve: true,
-                                                    choosePark33: true
-                                                })
-                                            }
-                                        },
-                                        { text: '否' }
-                                    ]
-                                )
-                            }
-                        }
-                    >
-                        {this.state.choosePark33 || params.park5 ?
-                            <Image source={require('../../img/reserve.png')} /> :
-                            <Image source={require('../../img/out.png')} />
-                        }
-                    </TouchableOpacity>
+                    <Image source={require('../../img/on.png')} />
+                    <Image source={require('../../img/on.png')} />
                 </View>
                 <Text style={{ textAlign: 'center', fontSize: 20 }}>4.5元/时</Text>
                 {
@@ -264,17 +188,27 @@ export class ParkInfoScreen extends Component {
                                                                 lock: value,
                                                                 time: reserveHour
                                                             })
-                                                            this.props.orderInfo(this.props.navigation.state.params.parkname, this.state.choosePark11, this.state.choosePark13, this.state.choosePark22, this.state.choosePark31, this.state.choosePark33, reserveHour)
+                                                            this.props.orderInfo(this.props.navigation.state.params.parkname, this.state.choosePark11, this.state.choosePark22, reserveHour)
                                                             this.setTime(this.state.time)
-                                                            fetch('http://120.79.200.81:5000/add', {
-                                                                method: 'GET',
-                                                            })
-                                                                .then((res) => {
-                                                                    return res.text()
+                                                            this.state.choosePark11 ?
+                                                                fetch('http://120.79.200.81:5000/add', {
+                                                                    method: 'GET',
                                                                 })
-                                                                .then((res) => {
-                                                                    console.log(res)
+                                                                    .then((res) => {
+                                                                        return res.text()
+                                                                    })
+                                                                    .then((res) => {
+                                                                        console.log(res)
+                                                                    }) :
+                                                                fetch('http://120.79.200.81:5000/update', {
+                                                                    method: 'GET',
                                                                 })
+                                                                    .then((res) => {
+                                                                        return res.text()
+                                                                    })
+                                                                    .then((res) => {
+                                                                        console.log(res)
+                                                                    })
 
                                                         }
                                                     },
@@ -287,16 +221,34 @@ export class ParkInfoScreen extends Component {
                                                     {
                                                         text: '是', onPress: () => {
                                                             ToastAndroid.show('关闭成功，本次消费' + `${this.state.setTime * 4.5}` + '元', ToastAndroid.SHORT)
-                                                            this.setState({ lock: value })
-                                                            fetch('http://120.79.200.81:5000/delete', {
-                                                                method: 'GET',
+                                                            this.state.choosePark11 ?
+                                                                fetch('http://120.79.200.81:5000/delete', {
+                                                                    method: 'GET',
+                                                                })
+                                                                    .then((res) => {
+                                                                        return res.text()
+                                                                    })
+                                                                    .then((res) => {
+                                                                        console.log(res)
+                                                                    }) :
+                                                                fetch('http://120.79.200.81:5000/list', {
+                                                                    method: 'GET',
+                                                                })
+                                                                    .then((res) => {
+                                                                        return res.text()
+                                                                    })
+                                                                    .then((res) => {
+                                                                        console.log(res)
+                                                                    })
+                                                            this.setState({
+                                                                lock: value,
+                                                                reserve: false,
+                                                                park: false,
+                                                                choosePark11: false,
+                                                                choosePark22: false
                                                             })
-                                                                .then((res) => {
-                                                                    return res.text()
-                                                                })
-                                                                .then((res) => {
-                                                                    console.log(res)
-                                                                })
+                                                            params.park1 || params.park2 ? navigate('HomePage') : null
+                                                            this.props.orderInfo()
                                                         }
                                                     },
                                                     { text: '否' }
@@ -308,7 +260,8 @@ export class ParkInfoScreen extends Component {
                                 value={this.state.lock || params.lock} />
                             {
                                 this.state.time || params.time ?
-                                    <Text>已停车{this.state.setTime ? this.state.setTime : 0}时</Text>
+                                    (this.props.purseBalance(this.state.setTime*4.5),
+                                        <Text>已停车{this.state.setTime ? this.state.setTime : 0}时</Text>)
                                     : null
                             }
 
@@ -326,8 +279,11 @@ function importStateToProps(storeState) {
 
 function importActionToProps(dispatch) {
     return {
-        orderInfo: (parkname, park1, park2, park3, park4, park5, time) => {
-            dispatch(orderInfo(parkname, park1, park2, park3, park4, park5, time))
+        orderInfo: (parkname, park1, park2, time) => {
+            dispatch(orderInfo(parkname, park1, park2, time))
+        },
+        purseBalance: (fare) => {
+            dispatch(purseBalance(fare))
         }
     }
 }

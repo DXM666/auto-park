@@ -21,7 +21,6 @@
     <!-- 通过WiFi或移动基站的方式获取用户错略的经纬度信息 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- 获取模拟定位信息 -->
-    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_GPS" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -47,7 +46,7 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="8ad0cd854e9e5b328774ef662130c285"/>
+            android:value="16dcbc939e38223d25cc69aa5f2f13a7"/>
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"

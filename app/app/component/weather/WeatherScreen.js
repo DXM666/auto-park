@@ -49,7 +49,7 @@ export class Weather extends Component {
 
 
     render() {
-        let backgroundImageValue = require('../../img/bg0.jpg');
+        let backgroundImageValue = require('../../img/bg.jpg');
         return (
             <View style={styles.transparentBackground}>
                 <Image style={styles.bgImage} source={backgroundImageValue} />

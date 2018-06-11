@@ -1,3 +1,7 @@
+/*
+ * 主界面-地图页
+ */
+
 import React, { Component } from 'react'
 import {
   Alert,
@@ -46,6 +50,17 @@ export class Park extends Component {
     parkDistance: false
   }
 
+  componentDidMount() {
+    fetch('http://120.79.200.81:5000/update', {
+      method: 'GET',
+    })
+      .then((res) => {
+        return res.text()
+      })
+      .then((res) => {
+        console.log(res)
+      })
+  }
   Park_parkname = () => {
     //获取停车场信息的API
     let url = "http://restapi.amap.com/v3/place/around?key=a83dc06f627f2c8a9adf5bc046883497&location=" + `${this.state.longitude},${this.state.latitude}` + "&keywords=停车场&types=&offset=&page=&extensions=all";
@@ -92,7 +107,6 @@ export class Park extends Component {
       .catch(
         (error) => {
           console.log(error)
-          alert('距离数据请求失败，请稍后再试')
         }
       )
   }
