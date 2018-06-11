@@ -77,7 +77,7 @@ export class ParkInfoScreen extends Component {
                 this.setState({
                     setTime: time - reserveHour
                 })
-            }, 50000
+            }, 5000
         )
     }
     render() {
